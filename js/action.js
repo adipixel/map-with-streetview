@@ -70,6 +70,11 @@ function initMap() {
 	document.getElementById('toggle-drawing').addEventListener('click', function(){
 		toggleDrawing(drawingManager);
 	});
+
+	document.getElementById('zoom-to-area').addEventListener('click', function(){
+		zoomToArea();
+	});
+
 	
 	drawingManager.addListener('overlaycomplete', function(event){
 		if(polygon)
@@ -191,4 +196,37 @@ function computeAreaOfPolygon()
 	var area = google.maps.geometry.spherical.computeArea(polygon.getPath());
 	//alert("Area: "+area);
 	document.getElementById('area').innerHTML += "Area of selected polygon: <b>"+area.toFixed(2)+ "</b> sq meters ";
+}
+
+
+function zoomToArea()
+{
+	var geocoder = new google.maps.Geocoder();
+
+	var address = document.getElementById('zoom-to-area-text').value;
+	if(address == '')
+	{
+		window.alert("You must enter an address!");
+	}
+	else
+	{
+		geocoder.geocode(
+		{
+		address: address,
+		componentRestrictions: {locality:'New York'}
+		},
+		function(results, status){
+			if(status == google.maps.GeocoderStatus.OK)
+			{
+				map.setCenter(results[0].geometry.location);
+				map.setZoom(15);
+				window.alert(results[0].formatted_address +"\n"+results[0].geometry.location);
+			}
+			else
+			{
+				window.alert("We could not find the location, try entering a more specific place.");
+			}
+		}
+		);
+	}
 }
