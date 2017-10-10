@@ -6,11 +6,20 @@
 
 </head>
 <body>
+<div class="container">
+	<div class="options-box">
+		<h1>Find your NYC homes</h1>
+		<div>
+			<input type="button" id="show-listings" value="Show Listings">
+			<input type="button" id="hide-listings" value="Hide Listings">
+		</div>
+	</div>
+	<div id="map"></div>
+</div>
 
-<div id="map"></div>
 
 <script src="js/action.js"></script>
-<script src="https://maps.googleapis.com/maps/api/js?key=AIzaSyDPp4BPsgqlx0QekEqciHLSltjSd63Gvyg&v=3&callback=initMap"></script>
+<script async defer src="https://maps.googleapis.com/maps/api/js?key=AIzaSyDPp4BPsgqlx0QekEqciHLSltjSd63Gvyg&libraries=geometry&v=3&callback=initMap"></script>
 
 </body>
 </html>
