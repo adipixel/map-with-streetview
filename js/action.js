@@ -24,6 +24,21 @@ function initMap() {
 	var largeInfowindow = new 	google.maps.InfoWindow();
 	//var bounds = new google.maps.LatLngBounds();
 
+	//drawing manager
+	var drawingManager = new google.maps.drawing.DrawingManager({
+		drawingMode: google.maps.drawing.OverlayType.POLYGON,
+		drawingControl: true,
+		drawingControlOptions: {
+			position: google.maps.ControlPosition.TOP_LEFT,
+			drawingModes: [
+			google.maps.drawing.OverlayType.POLYGON
+			]
+		}
+	});
+
+
+
+
 	for(var i =0; i < locations.length; i++)
 	{
 		var position = locations[i].location;
@@ -51,6 +66,9 @@ function initMap() {
 
 	document.getElementById('show-listings').addEventListener('click', showListings);
 	document.getElementById('hide-listings').addEventListener('click', hideListings);
+	document.getElementById('toggle-drawing').addEventListener('click', function(){
+		toggleDrawing(drawingManager);
+	});
 	
 }
 
@@ -118,5 +136,13 @@ function populateInfoWindow(marker, infowindow)
 		}
 	}
 
-
+function toggleDrawing(drawingManager)
+{
+	if (drawingManager.map) {
+		drawingManager.setMap(null);
+	}
+	else{
+		drawingManager.setMap(map);
+	}
+}
 
