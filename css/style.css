@@ -67,3 +67,7 @@ html,
       	position: relative;
       	margin-left: 10px;
       }
+
+      #area{
+      	font-size: 12px;
+      }

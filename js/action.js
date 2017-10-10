@@ -186,9 +186,9 @@ function searchWithinPolygon()
 	computeAreaOfPolygon();
 }
 
-
 function computeAreaOfPolygon()
 {
 	var area = google.maps.geometry.spherical.computeArea(polygon.getPath());
-	alert("Area: "+area);
+	//alert("Area: "+area);
+	document.getElementById('area').innerHTML += "Area of selected polygon: <b>"+area.toFixed(2)+ "</b> sq meters ";
 }
