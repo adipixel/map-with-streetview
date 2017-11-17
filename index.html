@@ -1,34 +1,64 @@
 <!DOCTYPE html>
-<html>
+<html lang="en">
 <head>
-	<title>Hello Map</title>
+	<title>NYC Map</title>
+	<meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
+
+	<!-- Latest compiled and minified CSS -->
+	<link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/css/bootstrap.min.css">
+
+	<!-- jQuery library -->
+	<script src="https://ajax.googleapis.com/ajax/libs/jquery/3.2.1/jquery.min.js"></script>
+
+	<!-- Latest compiled JavaScript -->
+	<script src="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/js/bootstrap.min.js"></script>
 	<link rel="stylesheet" type="text/css" href="css/style.css">
 
 </head>
 <body>
-<div class="container">
-	<div class="options-box">
-		<h1>Find your NYC homes</h1>
-		<div>
-			<input type="button" id="show-listings" value="Show Listings">
-			<input type="button" id="hide-listings" value="Hide Listings">
-			<hr>
-			<span class="text">Draw a shape to search homes within it!</span>
-			<input type="button" id="toggle-drawing" value="Drawing Tools">
-			<div id="area"></div>
-			<hr>
-			<div>
-				<input type="text" id="zoom-to-area-text" placeholder="Enter your favorite area!">
-				<input type="button" id="zoom-to-area" value="Zoom">
+
+	<div class="container h100">
+		<div class="h100 row">
+			<div class="navi navbar-inverse" style="margin: 0">
+				<button class="ham_btn" id="ham"">Ham</button>
 			</div>
+			<div class="h100">
+				<div id="map" class="h100"></div>
+			</div>
+			<div id="optionPanel" class="option-panel navbar-inverse">
+				<!-- <div class="">
+					<h1>Find your NYC homes</h1>
+					<div>
+						<input type="button" id="show-listings" value="Show Listings">
+						<input type="button" id="hide-listings" value="Hide Listings">
+						<hr>
+						<span class="text">Draw a shape to search homes within it!</span>
+						<input type="button" id="toggle-drawing" value="Drawing Tools">
+						<div id="area"></div>
+						<hr>
+						<div>
+							<input type="text" id="zoom-to-area-text" placeholder="Enter your favorite area!">
+							<input type="button" id="zoom-to-area" value="Zoom">
+						</div>
+					</div>
+				</div> -->
+				<div class="row">
+					<input type="text" style="color: black" name="filterText" id="filterText" data-bind="value: $root.filter" />
+				</div>
+				<div class="row" data-bind="foreach: $root.filteredItems">
+					<div class="col-xs-12" style="color: white" data-bind="text: loc().title, click: $root.showMarker"></div>
+					
+				</div>
+			</div>
+	
 		</div>
 	</div>
-	<div id="map"></div>
-</div>
 
-
-<script src="js/action.js"></script>
-<script async defer src="https://maps.googleapis.com/maps/api/js?key=AIzaSyD3s21hFBQ9WUsPKHiKgsiZ4okS93XqUgo&libraries=drawing,geometry&v=3&callback=initMap"></script>
+	<script src="https://ajax.googleapis.com/ajax/libs/jquery/3.2.1/jquery.min.js"></script>
+	<script src="https://cdnjs.cloudflare.com/ajax/libs/knockout/3.4.2/knockout-min.js"></script>
+	<script src="js/script.js"></script>
+	<script src="js/action.js"></script>
+	<script async defer src="https://maps.googleapis.com/maps/api/js?key=AIzaSyD3s21hFBQ9WUsPKHiKgsiZ4okS93XqUgo&libraries=drawing,geometry&v=3&callback=initMap"></script>
 
 </body>
 </html>
