@@ -26,8 +26,8 @@ hr {
 }
 
 #pano {
-  width: 200px;
-  height: 200px;
+  width: 320px;
+  height: 240px;
 }
 
 .text {
@@ -96,6 +96,35 @@ hr {
   color: #fff;
   z-index: 2;
   transition: left 700ms;
+
+}
+
+.main_title{
+  font-size: 20px;
+  color: #fff;
+  transition: margin-left 700ms;
+  vertical-align: middle;
+  margin-left: 10px;
+
+}
+
+.ham_btn{
+    transition: margin-left 700ms;
+}
+
+.ham_btn{
+  background-color: transparent;
+  border: 0 none;
+  background-image: url("../images/ham.png");
+  background-repeat: no-repeat;
+  background-position: center; 
+  background-size: 100%;
+  width: 30px;
+  height: 30px;
+  margin-top: 10px;
+  margin-left: 10px;
+  margin-bottom: 10px;
+  vertical-align: middle;
 }
 
 .toggleHamBtn{
@@ -131,6 +160,81 @@ hr {
 
 }
 
-.ham_btn{
-    transition: margin-left 700ms;
+
+
+.filter_textbox{
+  width: 100%;
+  height: 40px;
+  background-color: transparent;
+  color: #fefefe;
+  font-size: 20px;
+  border: 0 none;
+  padding: 5px 45px 5px 5px;
+}
+
+.filter_box {
+    width: calc(100%-20px);
+    background-color: #383737;
+    margin: 10px 0;
+    box-sizing: border-box;
+    height: 40px;
+    position: relative;
+}
+.close_btn {
+    width: 40px;
+    height: 40px;
+    margin: 0;
+    border: 0 none;
+    position: absolute;
+    padding: 0;
+    vertical-align: top;
+    right: 0;
+    background-color: #7b7a7a;
+    top: 0;
+}
+
+.list_item{
+  color: #ffffff;
+  font-size: 15px;
+  padding: 5px 0;
+  height: 30px;
+}
+
+.list_item:hover{
+  background-color: #413e3e;
+  cursor: pointer;
+}
+
+.list_item:active{
+  background-color: #413e3e;
+}
+
+.places_holder{
+    width: 100%;
+    position: relative;
+    left: 0;
+    margin: 0;
+    max-height: 50%;
+}
+
+.marker_title{
+  font-size: 18px;
+  font-weight: 400;
+  margin: 10px 0;
+  height: 25px;
+}
+::-webkit-scrollbar {
+    display: none;
+}
+
+.nearby_holder {
+    height: 400px;
+    overflow: overlay;
+}
+
+.fs_filter {
+    font-size: 18px;
+    border: 1px solid #ffffff3b;
+    margin: 0 5px 5px;
+    border-radius: 3px;
 }

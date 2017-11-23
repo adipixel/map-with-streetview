@@ -1,5 +1,6 @@
 var map;
 var markers = [];
+var tempMarkers = [];
 var polygon = null;
 var locations = [
 		{title: 'Park Ave Penthouse', location: {lat: 40.7713024, lng: -73.9632393}},
@@ -16,45 +17,53 @@ function Place(location){
 	var self =this;
 	self.loc = ko.observable(location);
 }
+function FourSquare(venue, icon){
+	var self =this;
+	self.fourSq = ko.observable(venue);
+	self.icon = icon;
+}
 /*viewmodel*/
 function MapViewModel(){
 	var self = this;
 	self.locations = locations;
+	self.curLoc = ko.observable(locations[0].location);
+	self.detailsFlag = ko.observable(false);
+	self.placesFlag = ko.computed(function(){
+		return !self.detailsFlag();
+	})
 
 	self.places = ko.observableArray([]);
+
 	for (var i = 0; i < self.locations.length; i++) {
 		self.places.push(new Place(self.locations[i]));
 	}
 
 	self.showMarker = function(place){
+		//self.filter(place.loc().title);
 		for (var i = 0; i < markers.length; i++) {
 			if(self.locations[i].location == place.loc().location)
 			{
-				markers[i].setMap(map);
-				map.setCenter(markers[i].position);
+				//markers[i].setMap(map);
+				//map.setCenter(markers[i].position);
+				markers[i].setAnimation(google.maps.Animation.BOUNCE);	
+				self.curLoc(place.loc().location);
+
 			}
 			else
 			{
-				markers[i].setMap(null);
+				markers[i].setAnimation(null);
+				//markers[i].setMap(null);
 			}
 		}
 	}
 	self.showFilteredMarker = function(location){
 		for (var i = 0; i < markers.length; i++) {
-
 			if(self.locations[i].location == location)
 			{
 				markers[i].setMap(map);
 			}
 		}
 	}
-
-	self.stringStartsWith = function (string, startsWith) {
-		string = string || "";
-		if (startsWith.length > string.length)
-			return false;
-		return string.substring(0, startsWith.length) === startsWith;
-	};
 
 	self.filter = ko.observable('');
 	self.filteredItems = ko.computed(function(){
@@ -66,7 +75,8 @@ function MapViewModel(){
 		else{
 			hideListings();
 			return ko.utils.arrayFilter(self.places(), function(item) {
-				var temp =self.stringStartsWith(item.loc().title.toLowerCase(), filter);
+				//var temp = self.stringStartsWith(item.loc().title.toLowerCase(), filter);
+				var temp = item.loc().title.toLowerCase().includes(filter);
 				if (temp){
 					self.showFilteredMarker(item.loc().location);	
 				}
@@ -75,17 +85,75 @@ function MapViewModel(){
 		}
 	}, MapViewModel);
 
+
+	self.koList = ko.observableArray([]);
+
+	self.tagName = ko.observable("");
+	self.tagVenues = ko.computed(function(){
+		//delete all temp markers
+		for (var i = 0; i < tempMarkers.length; i++) {
+			tempMarkers[i].setMap(null);
+		}
+		tempMarkers = [];
+
+		self.koList([]);
+		var d = new Date();
+		$.get("https://api.foursquare.com/v2/venues/search?v="+ d.getFullYear()+ "" +d.getMonth()+""+d.getDate()+"&ll="+ self.curLoc().lat +","+ self.curLoc().lng +"&query="+self.tagName()+"&intent=checkin&radius=100&client_id=2N1SR4VB0TTXVM2WAHBD2DTRW40KYO3OQKBDJFM0NGDXPCZZ&client_secret=ENYVCAP4IGGRJ5CK3TV3JFCXA43LKBIWS3EZEAM4V2T4DRIK", function(data){
+			var jObj = data.response.venues;
+			for (var i = 0; i < jObj.length; i++) {
+				//console.log(jObj[i].categories[0].icon.prefix);
+				var icon = "";
+				if (jObj[i].categories[0] != null){
+					icon = "" + jObj[i].categories[0].icon.prefix + "32" + jObj[i].categories[0].icon.suffix;	
+				}
+				self.koList.push(new FourSquare(jObj[i], icon));
+			}
+			console.log(jObj);
+		});
+	}, MapViewModel);
+
+	self.generateMarker = function(fs){
+		//alert(fs.fourSq().name);
+		var mark = fs.fourSq();
+		var position = {lat: mark.location.lat, lng: mark.location.lng};
+		var title = mark.name + ": " + mark.location.address;
+		//console.log(mark.categories.icon.prefix);
+		
+
+		var marker = new google.maps.Marker({
+    		position: position,
+    		map: map,
+    		icon: 'http://maps.google.com/mapfiles/ms/icons/blue-pushpin.png',
+    		title: title,
+    		draggable: true,
+    		animation: google.maps.Animation.DROP
+		});
+	
+		tempMarkers.push(marker);
+
+		marker.addListener('click', function(){
+			//marker.setMap(null);
+			clickedMarker(this,1)
+
+		});	
+	}
+
+	self.showAll = function(){
+		self.filter('');
+		self.detailsFlag(false);
+		showListings();
+	}
+
+}
+var vm = new MapViewModel();
+ko.applyBindings(vm);
+
+
+function deleteMarker(self){
+	self.setMap(null);
 }
 
-ko.applyBindings(new MapViewModel());
-
-
-
-
-
-
-
- /*MAP*/
+/*MAP*/
 function initMap() {
 
 	var myLatLng = {lat: 40.7413549, lng: -73.99802439999996};
@@ -94,7 +162,6 @@ function initMap() {
     	zoom: 13,
     	center: myLatLng
 	});
-
 
 
 	var largeInfowindow = new 	google.maps.InfoWindow();
@@ -135,6 +202,7 @@ function initMap() {
 
 		marker.addListener('click', function(){
 			populateInfoWindow(this, largeInfowindow);
+			clickedMarker(this,0);
 		});		
 	}
 
@@ -212,7 +280,7 @@ function populateInfoWindow(marker, infowindow)
 					var nearStreetViewLocation = data.location.latLng;
 					var heading = google.maps.geometry.spherical.computeHeading(
                 nearStreetViewLocation, marker.position);
-					infowindow.setContent('<div>' + marker.title + '</div><div id="pano"></div>');
+					infowindow.setContent('<div><span class="marker_title">' + marker.title + '</span></div><div id="pano"></div>');
 					var panoramaOptions = {
 						position: nearStreetViewLocation,
 						pov: {
@@ -307,3 +375,23 @@ function zoomToArea()
 	}
 }
 
+function clickedMarker(marker, op){
+
+	for (var i = 0; i < markers.length; i++) {
+		markers[i].setAnimation(null);
+		vm.detailsFlag(true);
+		if(markers[i].position == marker.position){
+			if (op == 1)
+			{
+				window.open('https://www.google.com/maps/@'+locations[i].location.lat+','+locations[i].location.lng+',15z');
+				break;
+			}
+			else
+			{
+				vm.curLoc(locations[i].location);
+			}
+		}
+	}
+	/*vm.curLoc(position);*/
+	vm.filter(marker.title);
+}

@@ -2,7 +2,7 @@
 <html lang="en">
 <head>
 	<title>NYC Map</title>
-	<meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
+	<meta charset="UTF-8" name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
 
 	<!-- Latest compiled and minified CSS -->
 	<link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/css/bootstrap.min.css">
@@ -20,7 +20,8 @@
 	<div class="container h100">
 		<div class="h100 row">
 			<div class="navi navbar-inverse" style="margin: 0">
-				<button class="ham_btn" id="ham"">Ham</button>
+				<button class="ham_btn" id="ham""></button>
+				<span id=:"mainTitle" class="main_title">New York City Places</span>
 			</div>
 			<div class="h100">
 				<div id="map" class="h100"></div>
@@ -42,11 +43,42 @@
 						</div>
 					</div>
 				</div> -->
-				<div class="row">
-					<input type="text" style="color: black" name="filterText" id="filterText" data-bind="value: $root.filter" />
-				</div>
-				<div class="row" data-bind="foreach: $root.filteredItems">
-					<div class="col-xs-12" style="color: white" data-bind="text: loc().title, click: $root.showMarker"></div>
+				<div class="container">
+					<div class="row">
+						<div class="col-xs-12">
+							<div class="filter_box">
+								<input type="text" class="filter_textbox" placeholder="Filter Places" name="filterText" id="filterText" data-bind="value: $root.filter" />
+								<button class="close_btn" data-bind="click: showAll, visible: filter().length > 0">X</button>
+							</div>
+						</div>
+					</div>
+					<div class="row places_holder" data-bind="foreach: $root.filteredItems, visible: $root.placesFlag()">
+						<div class="col-xs-12 list_item" data-bind="text: loc().title, click: $root.showMarker">
+							
+						</div>
+						
+					</div>
+
+
+					<div class="row" data-bind="visible: $root.detailsFlag()">
+						<div class="row">
+							<div class="col-xs-12">
+								<div class="container">
+									<label class="h4">Nearby Places</label>
+									<input type="text" class="fs_filter filter_textbox" data-bind="value: $root.tagName" placeholder="Coffee, Diner, ATM, Gas, etc"/>
+								</div>
+							</div>
+						</div>
+						<div class="container">
+							<div class="row nearby_holder" data-bind="foreach: $root.koList()">
+								<div class="col-xs-12">
+									<img data-bind="attr: {src: icon}"/>
+									<span data-bind="text: fourSq().name, click: $root.generateMarker"></span>
+								</div>
+							</div>
+						</div>
+					</div>
+
 					
 				</div>
 			</div>
