@@ -16,6 +16,7 @@ Also added few third-party APIs like Four Square, Wikipedia, etc. to provide add
 - Bootstrap v3
 - Git / github.com
 
+
 ### Execution Instructions
 1. Open terminal
 2. Clone this directory using `https://github.com/adipixel/map-with-streetview.git`

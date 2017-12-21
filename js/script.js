@@ -59,7 +59,6 @@ function MapViewModel(){
 		for (var i = 0; i < markers.length; i++) {
 			if(self.locations[i].location == place.loc().location)
 			{
-				//markers[i].setMap(map);
 				//map.setCenter(markers[i].position);
 				markers[i].setAnimation(google.maps.Animation.BOUNCE);
 				self.curLoc(place.loc().location);
