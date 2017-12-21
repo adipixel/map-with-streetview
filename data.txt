@@ -1,0 +1,7 @@
+https://www.instagram.com/oauth/authorize/?client_id=3e228cc356b0448f8e632b042d5b4d3d&redirect_uri=http://adityamhamunkar.info/&response_type=token
+
+https://api.instagram.com/v1/tags/search?q=snowy&access_token=
+
+
+
+https://api.foursquare.com/v2/venues/search?ll=40.7713024,-73.9632393&intent=checkin&radius=1000&client_id=2N1SR4VB0TTXVM2WAHBD2DTRW40KYO3OQKBDJFM0NGDXPCZZ&client_secret=ENYVCAP4IGGRJ5CK3TV3JFCXA43LKBIWS3EZEAM4V2T4DRIK&v=20171016

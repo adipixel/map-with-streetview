@@ -87,6 +87,7 @@ hr {
   text-align: left;
   width: 340px;
 }*/
+
 .option-panel {
   height: 100%;
   width: 80%;
@@ -96,6 +97,7 @@ hr {
   color: #fff;
   z-index: 2;
   transition: left 700ms;
+  overflow: overlay;
 
 }
 
@@ -117,7 +119,7 @@ hr {
   border: 0 none;
   background-image: url("../images/ham.png");
   background-repeat: no-repeat;
-  background-position: center; 
+  background-position: center;
   background-size: 100%;
   width: 30px;
   height: 30px;
@@ -128,7 +130,7 @@ hr {
 }
 
 .toggleHamBtn{
-  margin-left: 80%; 
+  margin-left: 80%;
   transition: margin-left 700ms;
 }
 
@@ -145,7 +147,7 @@ hr {
   }
 
   .toggleHamBtn {
-    margin-left: 350px; 
+    margin-left: 350px;
     transition: margin-left 700ms;
   }
 }
@@ -160,7 +162,15 @@ hr {
 
 }
 
-
+.sub_filter_textbox{
+  width: 100%;
+  height: 30px;
+  background-color: transparent;
+  color: #fefefe;
+  font-size: 16px;
+  border: 0 none;
+  padding: 5px 45px 5px 5px;
+}
 
 .filter_textbox{
   width: 100%;
@@ -196,7 +206,6 @@ hr {
 .list_item{
   color: #ffffff;
   font-size: 15px;
-  padding: 5px 0;
   height: 30px;
 }
 
@@ -228,8 +237,16 @@ hr {
 }
 
 .nearby_holder {
-    height: 400px;
+    height: 70%;
     overflow: overlay;
+    top: 80px;
+    position: absolute;
+}
+
+.images_holder{
+    max-height: 50%;
+    overflow: overlay;
+
 }
 
 .fs_filter {
@@ -237,4 +254,30 @@ hr {
     border: 1px solid #ffffff3b;
     margin: 0 5px 5px;
     border-radius: 3px;
+}
+
+.list_img_box{
+  margin: 0;
+  padding: 0;
+  border: 0 none;
+}
+
+.list_image{
+  width: 32%;
+
+}
+
+.description_holder{
+  overflow: hidden;
+  height: 40%;
+  position: relative;
+}
+
+.nearby_box{
+  position: absolute;
+}
+
+.search_box_holder{
+  height: 10%;
+  padding-top: 5px;
 }

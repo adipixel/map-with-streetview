@@ -10,8 +10,8 @@
 	<!-- jQuery library -->
 	<script src="https://ajax.googleapis.com/ajax/libs/jquery/3.2.1/jquery.min.js"></script>
 
-	<!-- Latest compiled JavaScript -->
-	<script src="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/js/bootstrap.min.js"></script>
+	<!-- Latest compiled and minified JavaScript -->
+	<script src="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/js/bootstrap.min.js" integrity="sha384-Tc5IQib027qvyjSMfHjOMaLkfuWVxZxUPnCJA7l2mCWNIpG9mGCD8wGNIcPD7Txa" crossorigin="anonymous"></script>
 	<link rel="stylesheet" type="text/css" href="css/style.css">
 
 </head>
@@ -21,68 +21,55 @@
 		<div class="h100 row">
 			<div class="navi navbar-inverse" style="margin: 0">
 				<button class="ham_btn" id="ham""></button>
-				<span id=:"mainTitle" class="main_title">New York City Places</span>
+				<span id=:"mainTitle" class="main_title">Top Picks in New York City</span>
 			</div>
 			<div class="h100">
 				<div id="map" class="h100"></div>
 			</div>
-			<div id="optionPanel" class="option-panel navbar-inverse">
-				<!-- <div class="">
-					<h1>Find your NYC homes</h1>
-					<div>
-						<input type="button" id="show-listings" value="Show Listings">
-						<input type="button" id="hide-listings" value="Hide Listings">
-						<hr>
-						<span class="text">Draw a shape to search homes within it!</span>
-						<input type="button" id="toggle-drawing" value="Drawing Tools">
-						<div id="area"></div>
-						<hr>
-						<div>
-							<input type="text" id="zoom-to-area-text" placeholder="Enter your favorite area!">
-							<input type="button" id="zoom-to-area" value="Zoom">
-						</div>
-					</div>
-				</div> -->
-				<div class="container">
-					<div class="row">
-						<div class="col-xs-12">
+			<div id="optionPanel" class="option-panel navbar-inverse" >
+				<div class="container h100">
+					<div class="row search_box_holder">
+						<div class="col-xs-12 ">
 							<div class="filter_box">
 								<input type="text" class="filter_textbox" placeholder="Filter Places" name="filterText" id="filterText" data-bind="value: $root.filter" />
 								<button class="close_btn" data-bind="click: showAll, visible: filter().length > 0">X</button>
 							</div>
 						</div>
-					</div>
-					<div class="row places_holder" data-bind="foreach: $root.filteredItems, visible: $root.placesFlag()">
-						<div class="col-xs-12 list_item" data-bind="text: loc().title, click: $root.showMarker">
-							
-						</div>
-						
-					</div>
 
-
-					<div class="row" data-bind="visible: $root.detailsFlag()">
-						<div class="row">
-							<div class="col-xs-12">
-								<div class="container">
-									<label class="h4">Nearby Places</label>
-									<input type="text" class="fs_filter filter_textbox" data-bind="value: $root.tagName" placeholder="Coffee, Diner, ATM, Gas, etc"/>
-								</div>
-							</div>
-						</div>
-						<div class="container">
-							<div class="row nearby_holder" data-bind="foreach: $root.koList()">
-								<div class="col-xs-12">
-									<img data-bind="attr: {src: icon}"/>
-									<span data-bind="text: fourSq().name, click: $root.generateMarker"></span>
+						<div class="col-xs-12">
+							<div class="row" data-bind="foreach: $root.filteredItems, visible: $root.placesFlag()">
+								<div class="col-xs-12 list_item" data-bind="text: loc().title, click: $root.showMarker">
+									<span ></span>
 								</div>
 							</div>
 						</div>
 					</div>
 
-					
+
+					<div class="row description_holder h-50" data-bind="visible: $root.detailsFlag()">
+						<div class="col-xs-12 nearby_box">
+								<label class="h4">Nearby Places</label>
+								<input type="text" class="fs_filter sub_filter_textbox" data-bind="value: $root.tagName" placeholder="Coffee, Diner, ATM, Gas, etc"/>
+							</div>
+						<div class="col-xs-12 nearby_holder" data-bind="foreach: $root.koList()">
+							<div class="d-flex">
+								<img data-bind="attr: {src: icon}"/>
+								<span data-bind="text: fourSq().name, click: $root.generateMarker"></span>
+							</div>
+						</div>
+					</div>
+
+					<div class="row justify-content-around images_holder" data-bind="foreach: $root.imgList(), visible: $root.detailsFlag()">
+						<div class="col-xs-4" style="padding: 2px; margin: 0">
+							<img class="d-flex img-responsive" data-bind="attr: {src: photo().prefix + '300x300' + photo().suffix}">
+						</div>
+
+					</div>
+
 				</div>
+
 			</div>
-	
+
 		</div>
 	</div>
 
