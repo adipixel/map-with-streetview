@@ -96,6 +96,7 @@ hr {
   color: #fff;
   z-index: 2;
   transition: left 700ms;
+  overflow: overlay;
 
 }
 
@@ -196,7 +197,6 @@ hr {
 .list_item{
   color: #ffffff;
   font-size: 15px;
-  padding: 5px 0;
   height: 30px;
 }
 
@@ -228,8 +228,15 @@ hr {
 }
 
 .nearby_holder {
-    height: 400px;
+    height: 300px;
     overflow: overlay;
+    margin-top: 100px;
+}
+
+.images_holder{
+    max-height: 45%;
+    overflow: overlay;
+
 }
 
 .fs_filter {
@@ -237,4 +244,25 @@ hr {
     border: 1px solid #ffffff3b;
     margin: 0 5px 5px;
     border-radius: 3px;
+}
+
+.list_img_box{
+  margin: 0;
+  padding: 0;
+  border: 0 none;
+}
+
+.list_image{
+  width: 32%;
+
+}
+
+.description_holder{
+  overflow: overlay;
+  height: 40%;
+  position: relative;
+}
+
+.nearby_box{
+  position: absolute;
 }

@@ -4,6 +4,14 @@
 	<title>Test</title>
 </head>
 <body>
+
+	<div class="container">
+		<div class="row">
+			<div class="col-xs-12">
+				<select value="{name:'aditya'}" data-bind="options: $root.venueList(), optionsText: function(item){ return item.category().name}, optionsValue: function(item){ return item.category()}, value: $root.selectedCategory, valueAllowUnset: true"></select>
+			</div>
+		</div>
+	</div>
 	<div id="main" class="container">
 		<input type="text" data-bind="value: $root.tagName" placeholder="Coffee, Diner, ATM, Gas, etc"/>
 
@@ -15,7 +23,15 @@
 
 			</li>
 		</ul>
+
+		<ul data-bind="foreach: $root.imgList()">
+			<li data-bind="">
+				<img data-bind="attr: {src: photo().prefix + '300x500' + photo().suffix}">
+
+			</li>
+		</ul>
 	</div>
+
 
 
 
