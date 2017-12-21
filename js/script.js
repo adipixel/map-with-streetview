@@ -45,7 +45,7 @@ function MapViewModel(){
 			{
 				//markers[i].setMap(map);
 				//map.setCenter(markers[i].position);
-				markers[i].setAnimation(google.maps.Animation.BOUNCE);	
+				markers[i].setAnimation(google.maps.Animation.BOUNCE);
 				self.curLoc(place.loc().location);
 
 			}
@@ -78,7 +78,7 @@ function MapViewModel(){
 				//var temp = self.stringStartsWith(item.loc().title.toLowerCase(), filter);
 				var temp = item.loc().title.toLowerCase().includes(filter);
 				if (temp){
-					self.showFilteredMarker(item.loc().location);	
+					self.showFilteredMarker(item.loc().location);
 				}
 				return temp;
         	});
@@ -98,18 +98,34 @@ function MapViewModel(){
 
 		self.koList([]);
 		var d = new Date();
-		$.get("https://api.foursquare.com/v2/venues/search?v="+ d.getFullYear()+ "" +d.getMonth()+""+d.getDate()+"&ll="+ self.curLoc().lat +","+ self.curLoc().lng +"&query="+self.tagName()+"&intent=checkin&radius=100&client_id=2N1SR4VB0TTXVM2WAHBD2DTRW40KYO3OQKBDJFM0NGDXPCZZ&client_secret=ENYVCAP4IGGRJ5CK3TV3JFCXA43LKBIWS3EZEAM4V2T4DRIK", function(data){
+		$.ajax({
+			url: "https://api.foursquare.com/v2/venues/search?v="+ d.getFullYear()+ "" +d.getMonth()+""+d.getDate()+"&ll="+ self.curLoc().lat +","+ self.curLoc().lng +"&query="+self.tagName()+"&intent=checkin&radius=100&client_id=2N1SR4VB0TTXVM2WAHBD2DTRW40KYO3OQKBDJFM0NGDXPCZZ&client_secret=ENYVCAP4IGGRJ5CK3TV3JFCXA43LKBIWS3EZEAM4V2T4DRIK",
+			type: 'GET',
+			success: function(data){
+				var jObj = data.response.venues;
+				for (var i = 0; i < jObj.length; i++) {
+					var icon = "";
+					if (jObj[i].categories[0] != null){
+						icon = "" + jObj[i].categories[0].icon.prefix + "32" + jObj[i].categories[0].icon.suffix;
+					}
+					self.koList.push(new FourSquare(jObj[i], icon));
+				}
+			},
+			error: function(data){
+				alert("Foursquare data did not load. Please refresh the page!")
+			}
+		});
+
+		/*$.get("https://api.foursquare.com/v2/venues/search?v="+ d.getFullYear()+ "" +d.getMonth()+""+d.getDate()+"&ll="+ self.curLoc().lat +","+ self.curLoc().lng +"&query="+self.tagName()+"&intent=checkin&radius=100&client_id=2N1SR4VB0TTXVM2WAHBD2DTRW40KYO3OQKBDJFM0NGDXPCZZ&client_secret=ENYVCAP4IGGRJ5CK3TV3JFCXA43LKBIWS3EZEAM4V2T4DRIK", function(data){
 			var jObj = data.response.venues;
 			for (var i = 0; i < jObj.length; i++) {
-				//console.log(jObj[i].categories[0].icon.prefix);
 				var icon = "";
 				if (jObj[i].categories[0] != null){
-					icon = "" + jObj[i].categories[0].icon.prefix + "32" + jObj[i].categories[0].icon.suffix;	
+					icon = "" + jObj[i].categories[0].icon.prefix + "32" + jObj[i].categories[0].icon.suffix;
 				}
 				self.koList.push(new FourSquare(jObj[i], icon));
 			}
-			console.log(jObj);
-		});
+		});*/
 	}, MapViewModel);
 
 	self.generateMarker = function(fs){
@@ -118,7 +134,7 @@ function MapViewModel(){
 		var position = {lat: mark.location.lat, lng: mark.location.lng};
 		var title = mark.name + ": " + mark.location.address;
 		//console.log(mark.categories.icon.prefix);
-		
+
 
 		var marker = new google.maps.Marker({
     		position: position,
@@ -128,14 +144,14 @@ function MapViewModel(){
     		draggable: true,
     		animation: google.maps.Animation.DROP
 		});
-	
+
 		tempMarkers.push(marker);
 
 		marker.addListener('click', function(){
 			//marker.setMap(null);
 			clickedMarker(this,1)
 
-		});	
+		});
 	}
 
 	self.showAll = function(){
@@ -203,22 +219,22 @@ function initMap() {
 		marker.addListener('click', function(){
 			populateInfoWindow(this, largeInfowindow);
 			clickedMarker(this,0);
-		});		
+		});
 	}
 
 	map.fitBounds(bounds);
 
-	document.getElementById('show-listings').addEventListener('click', showListings);
-	document.getElementById('hide-listings').addEventListener('click', hideListings);
-	document.getElementById('toggle-drawing').addEventListener('click', function(){
-		toggleDrawing(drawingManager);
-	});
+	//document.getElementById('show-listings').addEventListener('click', showListings);
+	//document.getElementById('hide-listings').addEventListener('click', hideListings);
+	//document.getElementById('toggle-drawing').addEventListener('click', function(){
+		//toggleDrawing(drawingManager);
+	//});
 
-	document.getElementById('zoom-to-area').addEventListener('click', function(){
-		zoomToArea();
-	});
+	//document.getElementById('zoom-to-area').addEventListener('click', function(){
+	//	zoomToArea();
+	//});
 
-	
+
 	drawingManager.addListener('overlaycomplete', function(event){
 		if(polygon)
 		{
@@ -294,7 +310,7 @@ function populateInfoWindow(marker, infowindow)
 				}
 				else
 				{
-					infowindow.setContent('<div>' + marker.title + '</div><div>No Street View found </div>'); 
+					infowindow.setContent('<div>' + marker.title + '</div><div>No Street View found </div>');
 				}
 			}
 
