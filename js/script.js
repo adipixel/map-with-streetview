@@ -40,6 +40,7 @@ function MapViewModel(){
 	self.placesFlag = ko.computed(function(){
 		return !self.detailsFlag();
 	});
+	self.hamFlag = ko.observable(false);
 	/*for loading images from foursquare*/
 	self.locId = ko.observable("40abf500f964a52035f31ee3");
 	self.imgList = ko.observableArray([]);
@@ -50,18 +51,26 @@ function MapViewModel(){
 		self.places.push(new Place(self.locations[i]));
 	}
 
-
+	self.clickHam = function(){
+		self.hamFlag(!self.hamFlag());
+	}
 	/**
 	* @description animates the selected marker
 	* @param {Place} place
 	*/
 	self.showMarker = function(place){
+
 		for (var i = 0; i < markers.length; i++) {
 			if(self.locations[i].location == place.loc().location)
 			{
 				//map.setCenter(markers[i].position);
-				markers[i].setAnimation(google.maps.Animation.BOUNCE);
+				//markers[i].setAnimation(google.maps.Animation.BOUNCE);
 				self.curLoc(place.loc().location);
+				self.detailsFlag(true);
+				self.filter(place.loc().title);
+				self.locId(locations[i].id);
+				toggleBounce(markers[i])
+				populateInfoWindow(markers[i], new google.maps.InfoWindow());
 			}
 			else
 			{
@@ -89,17 +98,23 @@ function MapViewModel(){
 	/**
 	* @description displays the filtered items
 	*/
-	self.filter = ko.observable('');
+	self.filter = ko.observable("");
 	self.filteredItems = ko.computed(function(){
 		var filter = self.filter().toLowerCase();
-		console.log(filter);
+		console.log("filter: "+filter);
 		if(!filter){
+			console.log("!filter")
+			//show all markers if the filter is blank
+			if(map!=null){
+				showListings();
+			}
 			return self.places();
 		}
 		else{
 			hideListings();
 			return ko.utils.arrayFilter(self.places(), function(item) {
 				//var temp = self.stringStartsWith(item.loc().title.toLowerCase(), filter);
+				console.log("yo")
 				var temp = item.loc().title.toLowerCase().includes(filter);
 				if (temp){
 					self.showFilteredMarker(item.loc().location);
@@ -205,8 +220,8 @@ function MapViewModel(){
 	self.showAll = function(){
 		self.detailsFlag(false);
 		self.koList([]);
-		showListings();
 		self.filter("");
+		showListings();
 		self.tagName("");
 	}
 
@@ -229,23 +244,8 @@ function initMap() {
 	});
 
 
-	var largeInfowindow = new 	google.maps.InfoWindow();
+	var largeInfowindow = new google.maps.InfoWindow();
 	var bounds = new google.maps.LatLngBounds();
-
-	//drawing manager
-	var drawingManager = new google.maps.drawing.DrawingManager({
-		drawingMode: google.maps.drawing.OverlayType.POLYGON,
-		drawingControl: true,
-		drawingControlOptions: {
-			position: google.maps.ControlPosition.TOP_LEFT,
-			drawingModes: [
-			google.maps.drawing.OverlayType.POLYGON
-			]
-		}
-	});
-
-
-
 
 	for(var i =0; i < locations.length; i++)
 	{
@@ -268,31 +268,14 @@ function initMap() {
 		marker.addListener('click', function(){
 			populateInfoWindow(this, largeInfowindow);
 			clickedMarker(this,0);
+			toggleBounce(this);
 		});
 	}
 
-	map.fitBounds(bounds);
-
-
-	drawingManager.addListener('overlaycomplete', function(event){
-		if(polygon)
-		{
-			polygon.setMap(null);
-			hideListings();
-		}
-		//pointer back to hand
-		drawingManager.setDrawingMode(null);
-		polygon = event.overlay;
-		polygon.setEditable(true);
-
-		searchWithinPolygon();
-
-		polygon.getPath().addListener('set_at', searchWithinPolygon);
-		polygon.getPath().addListener('insert_at', searchWithinPolygon);
-
-
+	//map.fitBounds(bounds);
+	google.maps.event.addDomListener(window, 'resize', function() {
+		map.fitBounds(bounds); // `bounds` is a `LatLngBounds` object
 	});
-
 }
 
 /**
@@ -306,6 +289,9 @@ function showListings()
 		bounds.extend(markers[i].position);
 	}
 	map.fitBounds(bounds);
+	/*google.maps.event.addDomListener(window, 'resize', function() {
+		map.fitBounds(bounds); // `bounds` is a `LatLngBounds` object
+	});*/
 }
 
 
@@ -380,9 +366,9 @@ function populateInfoWindow(marker, infowindow)
 */
 
 function clickedMarker(marker, op){
-	console.log(marker);
+	//console.log(marker);
 	for (var i = 0; i < markers.length; i++) {
-		markers[i].setAnimation(null);
+		//markers[i].setAnimation(null);
 		vm.detailsFlag(true);
 		if (op == 1)
 		{
@@ -393,10 +379,23 @@ function clickedMarker(marker, op){
 		else if(markers[i].position == marker.position){
 			vm.curLoc(locations[i].location);
 			vm.locId(locations[i].id);
+
 			break;
 		}
 	}
 	vm.filter(marker.title);
-
-
 }
+
+function googleError(){
+	alert("Maps api error!")
+}
+
+function toggleBounce(marker) {
+	/*if (marker.getAnimation() !== null) {
+		marker.setAnimation(null);
+	} else {
+		marker.setAnimation(google.maps.Animation.BOUNCE);
+	}*/
+	marker.setAnimation(google.maps.Animation.BOUNCE);
+};
+
