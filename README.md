@@ -22,7 +22,7 @@ Also added few third-party APIs like Four Square, Wikipedia, etc. to provide add
 2. Clone this directory using `https://github.com/adipixel/map-with-streetview.git`
 3. Navigate to the cloned directory
 4. Open `index.html` in a web browser
-
+5. Done
 
 ### Topics learned
 - Asynchronous programming
